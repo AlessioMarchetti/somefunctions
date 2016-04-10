@@ -46,7 +46,7 @@ multiples::Int->[Int]
 multiples n = [n,2*n..]
 
 commonMultiples::[Int]->[Int]
-commonMultiples xs = foldl1 common.map multiples $xs
+commonMultiples xs = foldl1' common.map multiples $xs
 
 mcmList::[Int]->Int
 mcmList xs = foldl1' lcm xs
@@ -81,10 +81,10 @@ primeFactors n = listFactors n listPrimes
              |otherwise  = p:listFactors (n`quot`p) (p:pt)
 
 listFactors'::Int->[[Int]]
-listFactors' n = group $primeFactors n
+listFactors' n = group'.primeFactors $n
 
 primeFactors'::Int->[(Int,Int)]
-primeFactors' n = map elemLength $listFactors' n
+primeFactors' n = map elemLength.listFactors' $n
     where elemLength xs = (head xs,length xs)
 
 numDiv::Int->Int
@@ -114,7 +114,7 @@ listDiv 0 = []
 listDiv n = (1:).nubProductsList.primeFactors $n
 
 sumProductsList::[Int]->Int
-sumProductsList xs = foldl1 (\acc x->acc*(x+1)) $xs
+sumProductsList xs = foldl1' (\acc x->acc*(x+1)) $xs
 
 listFib::[Int]
 listFib = 0:1:(zipWith (+) listFib $tail listFib)
